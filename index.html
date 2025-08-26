@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png"> -->
+    <title>جامعتي - برنامج المحاضرات</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <h1><i class="fas fa-university"></i> جامعتي</h1>
+        <p>إدارة برنامج المحاضرات الأسبوعي</p>
+      </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="container">
+        <div class="nav-buttons">
+          <button id="addLectureBtn" class="btn btn-primary">
+            <i class="fas fa-plus"></i> إضافة محاضرة
+          </button>
+          <button id="exportBtn" class="btn btn-secondary">
+            <i class="fas fa-download"></i> تصدير البرنامج
+          </button>
+          <button id="notificationBtn" class="btn btn-secondary">
+            <i class="fas fa-bell"></i> إعدادات الإشعارات
+          </button>
+        </div>
+        <div class="search-container">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="البحث السريع في المحاضرات..."
+          />
+          <i class="fas fa-search search-icon"></i>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="container">
+        <!-- Add Lecture Form -->
+        <div id="addLectureForm" class="form-container hidden">
+          <h2>إضافة محاضرة جديدة</h2>
+          <form id="lectureForm">
+            <div class="form-group">
+              <label for="lectureName">اسم المحاضرة:</label>
+              <input type="text" id="lectureName" required />
+            </div>
+            <div class="form-group">
+              <label for="lectureType">نوع المحاضرة:</label>
+              <select id="lectureType" required>
+                <option value="">اختر نوع المحاضرة</option>
+                <option value="نظري">نظري</option>
+                <option value="عملي">عملي</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="doctorName">اسم دكتور المحاضرة:</label>
+              <input type="text" id="doctorName" placeholder="اختياري" />
+            </div>
+            <div class="form-group">
+              <label for="startTime">وقت بدء المحاضرة:</label>
+              <input type="time" id="startTime" required />
+            </div>
+            <div class="form-group">
+              <label for="endTime">وقت انتهاء المحاضرة:</label>
+              <input type="time" id="endTime" required />
+            </div>
+            <div class="form-group">
+              <label for="location">مكان الحضور:</label>
+              <input
+                type="text"
+                id="location"
+                placeholder="مثال: القاعة رقم 4511"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="day">اليوم:</label>
+              <select id="day" required>
+                <option value="">اختر اليوم</option>
+                <option value="الأحد">الأحد</option>
+                <option value="الاثنين">الاثنين</option>
+                <option value="الثلاثاء">الثلاثاء</option>
+                <option value="الأربعاء">الأربعاء</option>
+                <option value="الخميس">الخميس</option>
+                <option value="الجمعة">الجمعة</option>
+                <option value="السبت">السبت</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                حفظ المحاضرة
+              </button>
+              <button type="button" id="cancelBtn" class="btn btn-secondary">
+                إلغاء
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Notification Settings -->
+        <div id="notificationSettings" class="form-container hidden">
+          <h2>إعدادات الإشعارات</h2>
+          <div class="form-group">
+            <label for="dailyNotificationTime">وقت الإشعار اليومي:</label>
+            <input type="time" id="dailyNotificationTime" value="06:00" />
+            <small>سيتم إرسال إشعار يومي بعدد المحاضرات</small>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="enableNotifications" checked />
+              الإشعارات
+            </label>
+          </div>
+          <div class="form-actions">
+            <button id="saveNotificationBtn" class="btn btn-primary">
+              حفظ الإعدادات
+            </button>
+            <button id="requestPermissionBtn" class="btn btn-secondary">
+              طلب إذن الإشعارات
+            </button>
+            <button id="closeNotificationBtn" class="btn btn-secondary">
+              إغلاق
+            </button>
+          </div>
+        </div>
+
+        <!-- Weekly Schedule -->
+        <div id="weeklySchedule" class="schedule-container">
+          <h2>البرنامج الأسبوعي للمحاضرات</h2>
+          <div id="scheduleGrid" class="schedule-grid">
+            <!-- Schedule will be generated here -->
+          </div>
+        </div>
+
+        <!-- No Lectures Message -->
+        <div id="noLecturesMsg" class="no-lectures hidden">
+          <i class="fas fa-calendar-alt"></i>
+          <h3>لا توجد محاضرات مضافة</h3>
+          <p>قم بإضافة محاضراتك لعرض البرنامج الأسبوعي</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>
+          تم إنشاء هذا المشروع بواسطة <strong>ABDULLAH ALASAAD</strong> وزملائه
+        </p>
+        <p>© 2025 جامعتي - جميع الحقوق محفوظة</p>
+      </div>
+    </footer>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal hidden">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>تعديل المحاضرة</h2>
+        <form id="editForm">
+          <input type="hidden" id="editLectureId" />
+          <div class="form-group">
+            <label for="editLectureName">اسم المحاضرة:</label>
+            <input type="text" id="editLectureName" required />
+          </div>
+          <div class="form-group">
+            <label for="editLectureType">نوع المحاضرة:</label>
+            <select id="editLectureType" required>
+              <option value="نظري">نظري</option>
+              <option value="عملي">عملي</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editDoctorName">اسم دكتور المحاضرة:</label>
+            <input type="text" id="editDoctorName" />
+          </div>
+          <div class="form-group">
+            <label for="editStartTime">وقت البدء:</label>
+            <input type="time" id="editStartTime" required />
+          </div>
+          <div class="form-group">
+            <label for="editEndTime">وقت الانتهاء:</label>
+            <input type="time" id="editEndTime" required />
+          </div>
+          <div class="form-group">
+            <label for="editLocation">مكان الحضور:</label>
+            <input type="text" id="editLocation" required />
+          </div>
+          <div class="form-group">
+            <label for="editDay">اليوم:</label>
+            <select id="editDay" required>
+              <option value="الأحد">الأحد</option>
+              <option value="الاثنين">الاثنين</option>
+              <option value="الثلاثاء">الثلاثاء</option>
+              <option value="الأربعاء">الأربعاء</option>
+              <option value="الخميس">الخميس</option>
+              <option value="الجمعة">الجمعة</option>
+              <option value="السبت">السبت</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+            <button type="button" class="btn btn-danger" id="deleteBtn">
+              حذف المحاضرة
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
