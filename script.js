@@ -613,3 +613,50 @@ document.addEventListener('DOMContentLoaded', function() {
     schedule = new UniversitySchedule();
     console.log('University Schedule App initialized');
 });
+
+
+// ---------------- Firebase Cloud Messaging ----------------
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-messaging.js";
+
+// إعدادات Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyAhkqqvn5_bD3hcUG4RGTSHcisv-Fh44D0",
+    authDomain: "arx-test-d51f5.firebaseapp.com",
+    projectId: "arx-test-d51f5",
+    storageBucket: "arx-test-d51f5.firebasestorage.app",
+    messagingSenderId: "586017596261",
+    appId: "1:586017596261:web:84a71c13d5cfb2d548378c",
+    measurementId: "G-3VQJ6WZL7V"
+};
+
+// تهيئة Firebase
+const appFirebase = initializeApp(firebaseConfig);
+const messaging = getMessaging(appFirebase);
+
+// زر تفعيل الإشعارات
+document.getElementById("enable-notifications").addEventListener("click", async () => {
+    try {
+        const token = await getToken(messaging, {
+            vapidKey: "BMmGET1D9b2uhgP8ZtElvIfgrmUoBF2Pbm606QdOvYTxifBE6gdpOFoeFgs1jP-dTUoexah3BKFtWPmxYqxkx60"
+        });
+        if (token) {
+            console.log("✅ تم الحصول على التوكن:", token);
+            alert("تم تفعيل إشعارات Firebase بنجاح!");
+        } else {
+            console.warn("⚠️ لم يتم السماح بالإشعارات");
+        }
+    } catch (err) {
+        console.error("❌ خطأ أثناء جلب التوكن:", err);
+    }
+});
+
+// استقبال الإشعارات عند فتح الصفحة
+onMessage(messaging, (payload) => {
+    console.log("📩 إشعار جديد:", payload);
+    new Notification(payload.notification.title, {
+        body: payload.notification.body,
+        icon: "/icon.png"
+    });
+});
+// ----------------------------------------------------------
